@@ -36,17 +36,16 @@
         var game = new Phaser.Game(config);
 
         function preload() {
-            // キャラクター画像（ローカルのassetsフォルダから）
+            // キャラクター画像（ローカルの assets フォルダから）
             this.load.image('wizard', 'assets/wizard.png');
 
-            
-            this.load.image('sky', 'https://labs.phaser.io/assets/skies/space3.png'); // 背景画像
-
+            // 背景画像（正しいキー名に変更）
+            this.load.image('sky', 'https://labs.phaser.io/assets/skies/space3.png');
         }
 
         function create() {
-            // 背景画像を追加（あれば）
-            this.add.image(400, 300, 'background');
+            // 背景画像を追加（修正）
+            this.add.image(400, 300, 'sky');
 
             // キャラクターを画面中央に配置
             player = this.physics.add.sprite(400, 300, 'wizard');
