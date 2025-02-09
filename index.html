@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>魔法使いの冒険</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script>
+        // ゲームの設定
+        var config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 0 }, // 重力なし（平面移動）
+                    debug: false // デバッグモードを無効
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+        
+        var player;
+        var cursors;
+
+        // ゲームを作成
+        var game = new Phaser.Game(config);
+        
+        function preload() {
+            // プレイヤーの画像や背景の読み込み
+            this.load.image('sky', 'https://labs.phaser.io/assets/skies/space3.png'); // 背景
+            this.load.image('wizard', 'https://phaser.io/content/images/logo.svg'); // プレイヤー画像
+        }
+        
+        function create() {
+            // 背景を設定
+            this.add.image(400, 300, 'sky');
+            
+            // プレイヤーキャラクターを作成
+            player = this.physics.add.sprite(400, 300, 'wizard');
+            player.setCollideWorldBounds(true); // 画面外に出ないようにする
+
+            // プレイヤーの初期速度設定
+            player.setVelocityX(0);
+            player.setVelocityY(0);
+            
+            // キー入力を設定
+            cursors = this.input.keyboard.createCursorKeys();
+        }
+        
+        function update() {
+            // プレイヤーの移動
+            if (cursors.left.isDown) {
+                player.setVelocityX(-160);
+            } else if (cursors.right.isDown) {
+                player.setVelocityX(160);
+            } else {
+                player.setVelocityX(0);
+            }
+            
+            if (cursors.up.isDown) {
+                player.setVelocityY(-160);
+            } else if (cursors.down.isDown) {
+                player.setVelocityY(160);
+            } else {
+                player.setVelocityY(0);
+            }
+        }
+    </script>
+</body>
+</html>
