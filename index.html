@@ -12,7 +12,6 @@
 </head>
 <body>
     <script>
-        // ゲームの設定
         var config = {
             type: Phaser.AUTO,
             width: 800,
@@ -20,8 +19,8 @@
             physics: {
                 default: 'arcade',
                 arcade: {
-                    gravity: { y: 0 }, // 重力なし（平面移動）
-                    debug: false // デバッグモードを無効
+                    gravity: { y: 0 },
+                    debug: false
                 }
             },
             scene: {
@@ -30,23 +29,22 @@
                 update: update
             }
         };
-        
+
         var player;
         var cursors;
 
-        // ゲームを作成
         var game = new Phaser.Game(config);
-        
+
         function preload() {
-            // プレイヤーの画像や背景の読み込み
-            this.load.image('sky', 'https://labs.phaser.io/assets/skies/space3.png'); // 背景
-            this.load.image('wizard', 'https://phaser.io/content/images/logo.svg'); // プレイヤー画像
+            // 背景と魔法使いキャラクターのドット絵を読み込む
+            this.load.image('sky', 'https://labs.phaser.io/assets/skies/space3.png'); // 背景画像
+            this.load.spritesheet('wizard', 'https://kenney.nl/assets/characters/fantasy-characters/fantasy-characters-1.png', { frameWidth: 32, frameHeight: 32 }); // 魔法使いのドット絵キャラクター
         }
-        
+
         function create() {
             // 背景を設定
             this.add.image(400, 300, 'sky');
-            
+
             // プレイヤーキャラクターを作成
             player = this.physics.add.sprite(400, 300, 'wizard');
             player.setCollideWorldBounds(true); // 画面外に出ないようにする
@@ -54,21 +52,38 @@
             // プレイヤーの初期速度設定
             player.setVelocityX(0);
             player.setVelocityY(0);
-            
+
+            // アニメーションを作成（歩くアニメーション）
+            this.anims.create({
+                key: 'left',
+                frames: this.anims.generateFrameNumbers('wizard', { start: 0, end: 3 }),
+                frameRate: 10,
+                repeat: -1
+            });
+            this.anims.create({
+                key: 'right',
+                frames: this.anims.generateFrameNumbers('wizard', { start: 4, end: 7 }),
+                frameRate: 10,
+                repeat: -1
+            });
+
             // キー入力を設定
             cursors = this.input.keyboard.createCursorKeys();
         }
-        
+
         function update() {
             // プレイヤーの移動
             if (cursors.left.isDown) {
                 player.setVelocityX(-160);
+                player.anims.play('left', true); // 左に歩くアニメーション
             } else if (cursors.right.isDown) {
                 player.setVelocityX(160);
+                player.anims.play('right', true); // 右に歩くアニメーション
             } else {
                 player.setVelocityX(0);
+                player.anims.stop();
             }
-            
+
             if (cursors.up.isDown) {
                 player.setVelocityY(-160);
             } else if (cursors.down.isDown) {
